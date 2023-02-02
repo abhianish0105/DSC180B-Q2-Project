@@ -7,6 +7,7 @@ import tweepy
 import csv
 import transformers
 from transformers import pipeline
+import numpy
 
 class Consumer(object):
     """
