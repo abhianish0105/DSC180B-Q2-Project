@@ -45,10 +45,10 @@ class Consumer(object):
                     Update count of total sentiments as tweets are streamed.
                     """
                     writer = csv.writer(f)
-                    if sentiment_pipeline(msg.data().decode("utf-8"))[0]['score'] < 0.4:
+                    if sentiment_pipeline(msg.data().decode("utf-8"))[0]['label'] == "neutral":
                         neutrals += 1
                     else:
-                        if sentiment_pipeline(msg.data().decode("utf-8"))[0]['label'] == "LABEL_0":
+                        if sentiment_pipeline(msg.data().decode("utf-8"))[0]['label'] == "negative":
                             negatives += 1
                         else:
                             positives += 1
