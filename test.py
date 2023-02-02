@@ -6,6 +6,7 @@ import string
 import logging
 import sys
 import tweepy
+import numpy
 from tweepy import StreamingClient, StreamRule
 from producer_test import Producer, IDPrinter
 
