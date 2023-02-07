@@ -36,7 +36,7 @@ class Consumer(object):
                 """
                 Take pipeline from pre-trained model to send tweets through to be given a label and score pased on sentiment and polarity, respectively.
                 """
-                sentiment_pipeline = pipeline("sentiment-analysis", model = 'digitalepidemiologylab/covid-twitter-bert-v2')
+                sentiment_pipeline = pipeline("sentiment-analysis", model = 'cardiffnlp/twitter-roberta-base-sentiment-latest')
                 logging.info('{}'.format(sentiment_pipeline(msg.data().decode("utf-8"))))
                 logging.info('{}'.format(msg.data().decode("utf-8")))
 
