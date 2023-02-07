@@ -1,6 +1,9 @@
 import sys
 import os
 import json
+import transformers
+from transformers import pipeline
+import logging
 
 def main(targets):
 
@@ -15,18 +18,18 @@ def main(targets):
 
       #apply sentiment model
       for i in tweets:
-        sentiment = len(i)
-        if sentiment == "negative":
+        sentiment = pipeline("sentiment-analysis", model = 'cardiffnlp/twitter-roberta-base-sentiment-latest')
+        if sentiment(msg.data().decode("utf-8"))[0]['label'] == "negative":
           negatives += 1
-        if sentiment == "positive":
+        if sentiment(msg.data().decode("utf-8"))[0]['label'] == "positive":
           positives += 1
-        if sentiment == "neutral":
+        if sentiment(msg.data().decode("utf-8"))[0]['label'] == "neutral":
           neutrals += 1
 
       #output
-      print("Positives: " + str(positives))
-      print("Negatives: " + str(negatives))
-      print("Neutrals: " + str(neutrals))
+      logging.info("Positives: " + str(positives))
+      logging.info("Negatives: " + str(negatives))
+      logging.info("Neutrals: " + str(neutrals))
 
 
 if __name__ == '__main__':
