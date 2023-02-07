@@ -19,11 +19,11 @@ def main(targets):
       #apply sentiment model
       for i in tweets:
         sentiment = pipeline("sentiment-analysis", model = 'cardiffnlp/twitter-roberta-base-sentiment-latest')
-        if sentiment(msg.data().decode("utf-8"))[0]['label'] == "negative":
+        if sentiment(i)[0]['label'] == "negative":
           negatives += 1
-        if sentiment(msg.data().decode("utf-8"))[0]['label'] == "positive":
+        if sentiment(i)[0]['label'] == "positive":
           positives += 1
-        if sentiment(msg.data().decode("utf-8"))[0]['label'] == "neutral":
+        if sentiment(i)[0]['label'] == "neutral":
           neutrals += 1
 
       #output
