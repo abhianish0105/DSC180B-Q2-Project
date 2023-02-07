@@ -27,9 +27,9 @@ def main(targets):
           neutrals += 1
 
       #output
-      logging.info("Positives: " + str(positives))
-      logging.info("Negatives: " + str(negatives))
-      logging.info("Neutrals: " + str(neutrals))
+      print("Positives: " + str(positives))
+      print("Negatives: " + str(negatives))
+      print("Neutrals: " + str(neutrals))
 
 
 if __name__ == '__main__':
