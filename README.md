@@ -8,7 +8,7 @@ This project is on the sentiment analysis of tweets regarding the topic of gun c
 
 ## Running the Repository
 * Run the following docker image inside a container: 
-  * replace/replace
+  * tepatel/test_q2
 * To test the model on the test data: 
   * `python3 run.py test`
 
