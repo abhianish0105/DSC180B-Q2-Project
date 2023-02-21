@@ -1,7 +1,7 @@
-# Welcome our website for DSC180B A06
+# Welcome our website for DSC180B A03
 Authors:
-* Duha Aldebakel
-* Yu Cao
-* Anthony Limon
-* Rui Zhang
+* Brandon Vinhnee
+* Tej Patel
+* Abhi Anish
+
 ## This repository serves as the visual presentation for our project, and is the secondary output that is meant for a general audience.
