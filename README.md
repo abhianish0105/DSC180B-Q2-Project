@@ -2,6 +2,5 @@
 Authors:
 * Brandon Vinhnee
 * Tej Patel
-* Abhi Anish
+* Abhishek Nisha Anish Anish
 
-## This repository serves as the visual presentation for our project, and is the secondary output that is meant for a general audience.
