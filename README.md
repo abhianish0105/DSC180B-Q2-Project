@@ -2,5 +2,5 @@
 Authors:
 * Brandon Vinhnee
 * Tej Patel
-* Abhishek Nisha Anish Anish
+* Abhishek Nisha Anish
 
