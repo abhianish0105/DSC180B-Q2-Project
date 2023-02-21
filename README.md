@@ -1,16 +1,7 @@
-# DSC180B-Q2-Project
-
-# Twitter Sentiment Analysis on Gun Control
-
-## Introduction
-This project is on the sentiment analysis of tweets regarding the topic of gun control. 
-
-
-## Running the Repository
-* Run the following docker image inside a container: 
-  * tepatel/test_q2
-* To test the model on the test data: 
-  * `python3 run.py test`
-
-
-
+# Welcome our website for DSC180B A06
+Authors:
+* Duha Aldebakel
+* Yu Cao
+* Anthony Limon
+* Rui Zhang
+## This repository serves as the visual presentation for our project, and is the secondary output that is meant for a general audience.
