@@ -77,79 +77,7 @@ Next, based on alpha and the Dirichlet distribution, each document receives its 
 Next, based on theta and the multinomial distribution, each word in every document receives its own topic assignment, making D x N assignments in total. The model is a bag of words, so the ordering does not matter. Based on our previous example of 50% “health” and 50% “food”, each word would be flipping a coin and getting exactly only one of those assignments.
 
 <h4 id="Topic Vocab">Topic Vocab</a></h4>
-From the above, we have topic assignments for every word in every document. How is the actual word chosen? Starting from the far right, we have another hyperparameter of the Dirichlet distribution, to determine the concentration of the vocabulary of each topic. Since there are K topics, we draw from the Dirichlet distribution K times to get a discrete probability distribution of the vocabulary of each topic. For example, if the topic is “food”, the probabilities of words such as “sushi”, “rice”, “egg” would be higher than other topics.<br><br>
 
-Putting it together, we will condition on the chosen topic for the word from the topic assignment on the left pathway. This looks up the appropriate vocabulary for that topic. Using another multinomial distribution, we basically roll a weighted die customized for that topic to choose a random word assignment. This results in actual words that we observe.<br><br>
-
-This process is called Latent Dirichlet Allocation. The term “latent” refers to the fact that many of the parameters cannot be observed directly. The term “Dirichlet Allocation” refers to the manner in which we assign discrete probabilities on topic proportions.
-
-<h4 id="document generative process">Visualizing the document generative process</a></h4>
-<figure>
-  <img src="./images/lda_generative_process.png" alt="LDA document generative process" />
-  <figcaption>Courtesy of <a href="https://www.researchgate.net/publication/336065245_Insider_Threat_Detection_Based_on_User_Behavior_Modeling_and_Anomaly_Detection_Algorithms">Insider Threat Detection Based on User Behavior Modeling and Anomaly Detection Algorithms</a> </figcaption>
-</figure>
-  
-Now that we have some intuition of the model parameters we can pull it all together in a visual representation of our graphical model and what out data looks like.
-
-<h2 id="Bayesian Inference">Bayesian Inference</h2>
-Now that we have a generative model on how documents are generated from topics, the next step is to fit the model on live data. This process is called Bayesian Inference, which maximizes the likelihood of the latent parameters to match what we have seen from live data.<br><br>
-
-The issue is that solving this problem is intractable. This means it is difficult or impossible to solve analytically. The problem arises from the dependence of variables from the two pathways of “Topic Assignment” and “Topic Vocab”, where solving each pathway would require knowledge of the other.<br><br>
-
-Instead of trying to find the exact solution, it would thus be better to find a good approximate solution. Along this line, Mean-field variational inference and Gibbs Sampling are two popular ways to solve the inference problem for the latent parameters.<br><br>
-
-<h3 id="Mean-field variational inference">Mean-field variational inference</h3>
-<h4 id="Variational inference">Variational inference</h4>
-The technical term for the correct distribution given the observed data is the posterior, denoted by P, which is often not a “nice” distribution to deal with mathematically. The posterior can be any distribution at all and doesn’t have to be a well-known distribution that is mathematically easy to manipulate. The solution is to choose a distribution Q from a user-defined variational family that approximates P. (We choose Q within the variational family that is “closest” to P, using measures such as KL divergences.) This process of choosing a variational family, and then finding the closest distribution Q to P within that variational family is known as variational inference.
-<p><img src="./images/VariationalInference.png" alt="Variational Inference model" /></p>
-The graph above illustrates this where the posterior P which is conditioned on the observed data X has an unknown blue distribution. We use a Gaussian variational family, and vary the parameters which are in this case the mean and standard deviation to find the best Q to match the posterior. It would not be a perfect match, and thus this is an approximate solution. Obviously, the choice of the variational family would also determine how close Q will ultimately be to P.
-
-<h3 id="Mean-field variational inference">Mean-field variational inference</h3>
-Mean-field variational inference is a special case of variational inference where we further assume that the variational family can be fully factored. In other words, the latent parameters are all independent of each other. Recall that our main problem was due to the dependence of the variables on the left and right pathways to the observed data, with conditional probabilities involved in the definition. If we instead choose to break this and assume independence, the variational family would not have to deal with conditional probabilities but instead, be simply the product of all the multinomial and Dirichlet distributions. Explicitly:
-<figure><img src="./images/MFVI.png" alt="MFVI model" /></figure>
-The template for Mean-field variational inference thus looks like the image below. The arrows are no longer linked since the variables are independent. In addition, you would notice variational parameters phi and gamma. (And while not shown, there is also lambda as the variational parameter for beta.) These are variational parameters that are used to tweak the Q distribution to be as close to P as possible.
-<figure><img src="./images/LDAstructure.png" alt="LDA structure" /></figure>
-We can now hill-climb our way to find the best Q using the Expectation-Maximization (EM) Algorithm. This involves the E step that matches theta and z from the left pathway for topic proportions, with the assumption that every other latent parameter is already correct when independently optimizing a single latent parameter. (This is done by optimizing the variational parameters of phi and gamma for z and theta respectively.)<br><br>
-
-Then, the M step matches the beta from the right pathway for topic vocab, while again assuming that the latent parameters from the E step are correct due to independence. (This is done by optimizing the variational parameters of lambda for beta.)<br><br>
-
-The pseudo-code of the EM algorithm is shown below.
-<figure><img src="./images/EMalg.png" alt="EMalg" /></figure>
-
-<h3 id="Gibbs Sampling">Gibbs Sampling</h3>
-<p>In Q1 we explored MCMC methods, specifically the Metropolis-Hastings algorithm, to solve the problem of computing high-dimensional integrals. We learned that this particular class of 
-  sampling methods was especially effective in performing probabilistic inferences which can be applied to solve problems specifically within the field of Bayesian inference and learning. 
-  We applied this particular MCMC method for sampling posterior distributions, since the posterior probability distribution for parameters given our observations proved to be intractable, 
-  hence the use of sampling algorithms for approximate inference.
-<p>LDA is similar in that its aim is to infer the hidden structure of documents through posterior inference. Since we cannot exactly compute the conditional distribution of the hidden 
-  variables given our observations, we can use MCMC methods to approximate this intractable posterior distribution. Specifically, we can use Gibbs sampling to implement LDA. Gibbs sampling 
-  is another MCMC method that approximates intractable probability distributions by consecutively sampling from the joint conditional distribution: \[ P(W,Z,\phi, \theta| \alpha, \beta).\] 
-  This models the joint distribution of topic mixtures $\theta$, topic assignments $Z$, the words of a corpus $W$, and the topics $\phi$. In the approach we use, we leverage the collapsed 
-  Gibbs sampling method in not representing $\phi$ or $\theta$ as parameters to be estimated, and only considering the posterior distribution over the word topic assignments $P(Z|W)$.</p>
-
-<p>The first step of the algorithm is to go through each document and randomly assign each word in the document to one of the K topics. Apart from generating this topic assignment list, we’ll also create a word-topic matrix, which is the count of each word being assigned to each topic. And a document-topic matrix, which is the number of words assigned to each topic for each document (distribution of the topic assignment list)</p>
-<p>The initialization of random assignments gives you both the topic representations of all the documents and word distributions of all the topics, though not very good ones. In order to improve and eventually compute more accurate estimates of our parameters, we’ll employ the collapsed gibbs sampling method that performs the following steps for fixed number of iterations:
-
-  <li>For each document d, and for each word w in document d:
-    <ul><li>Reassign a new topic to w, where we choose a new topic assignment from the full conditional distribution: </p>
-    </li></ul>
-  </li>
-  <figure>
-    $P( z_i = j \text{ }| \text{ } z_{-i}, w_i, d_i ) 
-    \propto \frac{ C^{WT}_{w_ij} + \beta }{ \sum^W_{ w = 1 }C^{WT}_{wj} + W\beta } \times
-      \frac{ C^{DT}_{d_ij} + \alpha }{ \sum^T_{ t = 1 }C^{DT}_{d_it} + T\alpha }$
-  </figure>
-<p>Sampling from this distribution allows us to retrieve more accurate topic assignments as the sampler runs.
-  Note $C^{WT}$ is the word-topic matrix, and $C^{DT}$ is the document-topic matrix.
-</p>
-
-
-<!-- <p>To compute the collapsed gibbs sampler updates efficiently, the algorithm tracks several count matrices during sampling. Implementation includes tracking the number of times that a word 
-  is assigned to topic k across the corpus, and the number of word tokens in a document d that have been assigned to topic k</p>
-<p>During sampling, the sampler updates the topic assignment z of a word token w to one of the topics k ∈ {1...K}. This update is performed sequentially for all word tokens in the corpus, for a fixed number of iterations.</p> -->
-<p>After updating the topic assignments for the word tokens we can also retrieve estimates for the theta and phi parameters using the topic allocations.</p>
-<p>By estimating the parameters phi and theta we have effectively accomplished our goals in estimating which words are important for which topic and which topics are important for a particular document, respectively.</p>
-</p>
 
 <h3 id="our-approaches"><a href="/project-presentation/sections/approaches.html">Our approaches</a></h3>
 
