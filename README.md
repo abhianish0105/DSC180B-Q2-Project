@@ -7,6 +7,7 @@ This project is on the sentiment analysis of tweets regarding the topic of gun c
 
 
 ## Running the Repository
+* The code in this repository runs our sentiment analysis code on a small test set of test tweets, the same code that was ran on our collected database of tweets retrieved from the Twitter API.
 * Run the following docker image inside a container: 
   * tepatel/test_q2
 * To test the model on the test data: 
