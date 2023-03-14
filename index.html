@@ -36,7 +36,7 @@ In this ever growing period of chaos where gun violence seems to be spiraling ou
 
 <br> <br>The sample that will be used comes directly from the Twitter API. A Twitter firehose will be connected to a Pulsar Topic in DataStax Astra. The topic is then transformed with one Pulsar Function and the output is written to a second Pulsar Topic. Data will first be transformed using a Python script and then a machine learning model will be applied to measure sentiment and produce real-time analytics. This study will focus on gun control sentiment in the United States, so Twitter data will be filtered accordingly. Another important filter will be the time frame as we want to focus on Tweets from the time of the pandemic to now. Filtering in such a way makes the data suitable for the goal of this paper as this helps us target a certain area of Tweets while keeping a large enough dataset. Additionally, another part of the data that will be important in our analysis would be the labels that we choose to give our data. We could use this data along with TF-IDF and/or Word Embedding methods to figure out whether the particular data analyzed belongs to a positive, negative or neutral sentiment label.<figure>
   <img src="https://github.com/abhianish0105/DSC180B-Q2-Project/blob/gh-pages/images/updated_counts.png?raw=true" alt="Tweet Count Per Keyword">
-  <center><figcaption> Tweet Count Per Keyword </figcaption></center>
+  <center><figcaption> Figure 1. Tweet Count Per Keyword </figcaption></center>
 </figure>
 </p>
 
@@ -53,7 +53,8 @@ regarding respective topics.
 
 <figure>
   <img src="https://github.com/abhianish0105/DSC180B-Q2-Project/blob/gh-pages/images/method_diagram.png?raw=true" alt="Pipeline Architecture">
-  <center><figcaption> Pipeline Architecture </figcaption></center>
+  <br> <center><figcaption> Figure 2. Pipeline Architecture </figcaption></center>
+  <br>
 </figure>
 
 <p>
@@ -73,7 +74,7 @@ We decided on six keywords and phrases closely related to the topic of gun contr
 
 <figure>
   <center><img src="https://github.com/abhianish0105/DSC180B-Q2-Project/blob/gh-pages/images/pies.png?raw=true" alt="Pie Charts Per Keyword"></center>
-  <center><figcaption> Proportion of Sentiments Per Keyword(s) Query </figcaption></center>
+  <center><figcaption> Figure 3. Proportion of Sentiments Per Keyword(s) Query </figcaption></center>
 </figure>
   
 <h2 id="Conclusion">Conclusion</a></h2>
@@ -86,7 +87,7 @@ Seeing that the majority sentiment was “positive” toward gun control in most
 </figure>
  <figure>
   <center><img src="https://github.com/abhianish0105/DSC180B-Q2-Project/blob/gh-pages/images/gun_control_wordCloud%20(1).png?raw=true" alt="Gun Control Word Cloud"></center>
-  <center><figcaption> Word Cloud for 'Mass Shooting' & 'Gun Control' Queries </figcaption></center>
+  <center><figcaption> Figure 4. Word Cloud for 'Mass Shooting' & 'Gun Control' Queries </figcaption></center>
 </figure>
 </p>
 
